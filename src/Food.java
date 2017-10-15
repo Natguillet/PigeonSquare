@@ -5,8 +5,9 @@ public class Food extends JPanel{
     private int posX;
     private int posY;
     private Boolean fresh = true;
-    private int timeFresh = 3000;
-    private int timeDestruction = 30000;
+    private int time = 0;
+    private int timeFresh = 100;
+    private int timeDestruction = 300;
 
     Food(int posX, int posY) {
         super();
@@ -16,8 +17,21 @@ public class Food extends JPanel{
     }
 
     public void paintComponent(Graphics g){
-        g.setColor(Color.GREEN);
+        if(fresh) {
+            g.setColor(Color.GREEN);
+        } else {
+            g.setColor(Color.BLACK);
+        }
         g.fillOval(posX, posY, 10, 10);
+    }
+
+    public void update() {
+        this.time++;
+        if(this.time >= timeFresh && this.time <= timeDestruction){
+            fresh = false;
+        } else if(this.time >= timeDestruction) {
+            Main.foodList.remove(this);
+        }
     }
 
     public Boolean getFresh() {

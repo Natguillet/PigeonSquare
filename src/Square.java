@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 public class Square extends JFrame implements ActionListener, MouseListener {
-    private ArrayList<Food> foodList = new ArrayList<Food>();
     private ArrayList<Pigeon> pigeonList;
 
     public Square(ArrayList<Pigeon> pigeonList){
@@ -20,19 +19,18 @@ public class Square extends JFrame implements ActionListener, MouseListener {
         this.pigeonList = pigeonList;
     }
 
-    public ArrayList<Food> getFoodList() {
-        return foodList;
-    }
-
     @Override
     public void paint(Graphics g) {
-        for(int i = 0; i < foodList.size() && !foodList.isEmpty(); i++)
-        {
-            foodList.get(i).paintComponent(g);
-        }
+        g.setColor(Color.white);
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
         for(int i = 0; i < pigeonList.size() && !pigeonList.isEmpty(); i++)
         {
             pigeonList.get(i).paintComponent(g);
+        }
+        for(int i = 0; i < Main.foodList.size() && !Main.foodList.isEmpty(); i++)
+        {
+            Main.foodList.get(i).update();
+            Main.foodList.get(i).paintComponent(g);
         }
     }
 
@@ -45,7 +43,7 @@ public class Square extends JFrame implements ActionListener, MouseListener {
     public void mouseClicked(MouseEvent e) {
         System.out.println("Création food");
         Food food = new Food(e.getX(), e.getY());
-        foodList.add(food);
+        Main.foodList.add(food);
         repaint();
     }
 
