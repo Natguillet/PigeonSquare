@@ -1,13 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
-public class Pigeon extends JPanel implements Runnable{
+public class Pigeon extends Thread{
     private int posX = 50;
     private int posY = 100;
 
-    public Pigeon(int posX, int posY){
-        this.posX = posX;
-        this.posY = posY;
+    public Pigeon(){
+        Random randomizer = new Random();
+        this.posX = randomizer.nextInt(500);
+        this.posY = randomizer.nextInt(500);
     }
 
     public void move(Food food) {
@@ -51,9 +53,28 @@ public class Pigeon extends JPanel implements Runnable{
 
     @Override
     public void run() {
-       if(Main.foodList.size() > 0) {
-           //trouver la plus proche
-            move(Main.foodList.get(nearestFood()));
+        while (true) {
+            if(Main.rock.getExist()){
+                disperse(Main.rock.getPosX(), Main.rock.getPosY());
+            } else if(Main.foodList.size() > 0) {
+                move(Main.foodList.get(nearestFood()));
+            }
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {}
+        }
+    }
+
+    private void disperse(int x, int y) {
+        if(posX < x) {
+            posX--;
+        } else if (posX > x){
+            posX++;
+        }
+        if(posY < y) {
+            posY--;
+        } else if (posY > y){
+            posY++;
         }
     }
 
@@ -61,10 +82,8 @@ public class Pigeon extends JPanel implements Runnable{
         int nearestfood_number = 0;
         double first_distance = 10000;
         for (int i =0; i < Main.foodList.size(); i++){
-            //System.out.println(Main.foodList.get(i).getFresh());
             if (Main.foodList.get(i).getFresh()) {
                 double distance = Distance(posX,posY,Main.foodList.get(i).getPosX(),Main.foodList.get(i).getPosY());
-                //System.out.println(Main.foodList.get(i).getPosX());
                 if(first_distance > distance ){
                     first_distance = distance;
                     nearestfood_number = i;

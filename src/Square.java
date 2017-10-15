@@ -32,6 +32,7 @@ public class Square extends JFrame implements ActionListener, MouseListener {
             Main.foodList.get(i).update();
             Main.foodList.get(i).paintComponent(g);
         }
+        Main.rock.paintComponent(g);
     }
 
     @Override
